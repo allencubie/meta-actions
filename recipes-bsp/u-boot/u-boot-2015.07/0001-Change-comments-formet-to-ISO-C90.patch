@@ -1,0 +1,30 @@
+From 055f60d6b8b13d4f3f6ecd8a183b71c43e971e0d Mon Sep 17 00:00:00 2001
+From: Parthiban Nallathambi <parthiban@linumiz.com>
+Date: Sun, 23 Sep 2018 15:12:02 +0200
+Subject: [PATCH 1/4] Change comments formet to ISO C90
+
+Fixes "Error: C++ style comments are not allowed in ISO C90"
+
+Signed-off-by: Parthiban Nallathambi <parthiban@linumiz.com>
+
+%% original patch: 0001-Change-comments-formet-to-ISO-C90.patch
+---
+ include/configs/s700_cb7.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/configs/s700_cb7.h b/include/configs/s700_cb7.h
+index 9a650decf6..65c57f1862 100755
+--- a/include/configs/s700_cb7.h
++++ b/include/configs/s700_cb7.h
+@@ -144,7 +144,7 @@
+ /*irkey detect uhost ,if the uhost had update.zip , enter recovery update*/
+ #define IR_KEY_UDISK_DETECT         KEY_BACK
+ #define IR_KEY_ENTER_RECOVERY     KEY_SELECT
+-//#define CONFIG_IR_CONTROL_RECOVERY
++/* /#define CONFIG_IR_CONTROL_RECOVERY */
+ 
+ 
+ 
+-- 
+2.14.4
+

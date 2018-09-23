@@ -1,0 +1,143 @@
+From 4d4325a77c23696bd5713bb53215a357a17d82d5 Mon Sep 17 00:00:00 2001
+From: Parthiban Nallathambi <parthiban@linumiz.com>
+Date: Sun, 23 Sep 2018 15:21:40 +0200
+Subject: [PATCH 4/4] libfdl/fdt: header reference conflict (multipe
+ definition)
+
+- Resolve conflict in multiple definition of fdt API's
+
+Signed-off-by: Parthiban Nallathambi <parthiban@linumiz.com>
+
+%% original patch: 0004-libfdl-fdt-header-reference-conflict-multipe-definit.patch
+---
+ include/configs/s700_cb7.h | 2 +-
+ include/image.h            | 2 +-
+ include/libfdt.h           | 2 +-
+ lib/fdtdec_common.c        | 2 +-
+ lib/libfdt/fdt.c           | 2 +-
+ lib/libfdt/fdt_ro.c        | 2 +-
+ lib/libfdt/fdt_rw.c        | 2 +-
+ lib/libfdt/fdt_strerror.c  | 2 +-
+ lib/libfdt/fdt_wip.c       | 2 +-
+ 9 files changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/include/configs/s700_cb7.h b/include/configs/s700_cb7.h
+index 65c57f1862..683a8cc466 100755
+--- a/include/configs/s700_cb7.h
++++ b/include/configs/s700_cb7.h
+@@ -144,7 +144,7 @@
+ /*irkey detect uhost ,if the uhost had update.zip , enter recovery update*/
+ #define IR_KEY_UDISK_DETECT         KEY_BACK
+ #define IR_KEY_ENTER_RECOVERY     KEY_SELECT
+-/* /#define CONFIG_IR_CONTROL_RECOVERY */
++/* #define CONFIG_IR_CONTROL_RECOVERY */
+ 
+ 
+ 
+diff --git a/include/image.h b/include/image.h
+index 087bb7769d..abc04fae78 100644
+--- a/include/image.h
++++ b/include/image.h
+@@ -47,7 +47,7 @@ struct lmb;
+ 
+ #if defined(CONFIG_FIT)
+ #include <hash.h>
+-#include <libfdt.h>
++#include "libfdt.h"
+ #include <fdt_support.h>
+ # ifdef CONFIG_SPL_BUILD
+ #  ifdef CONFIG_SPL_CRC32_SUPPORT
+diff --git a/include/libfdt.h b/include/libfdt.h
+index f3cbb637be..dee350f03e 100644
+--- a/include/libfdt.h
++++ b/include/libfdt.h
+@@ -51,7 +51,7 @@
+  *     EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  */
+ 
+-#include <libfdt_env.h>
++#include "libfdt_env.h"
+ #include <fdt.h>
+ 
+ #define FDT_FIRST_SUPPORTED_VERSION	0x10
+diff --git a/lib/fdtdec_common.c b/lib/fdtdec_common.c
+index 757931a9cb..6877840698 100644
+--- a/lib/fdtdec_common.c
++++ b/lib/fdtdec_common.c
+@@ -13,7 +13,7 @@
+ #include <libfdt.h>
+ #include <fdtdec.h>
+ #else
+-#include "libfdt.h"
++#include "../include/libfdt.h"
+ #include "fdt_support.h"
+ 
+ #define debug(...)
+diff --git a/lib/libfdt/fdt.c b/lib/libfdt/fdt.c
+index e146aba6eb..8a3e51c073 100644
+--- a/lib/libfdt/fdt.c
++++ b/lib/libfdt/fdt.c
+@@ -3,7 +3,7 @@
+  * Copyright (C) 2006 David Gibson, IBM Corporation.
+  * SPDX-License-Identifier:	GPL-2.0+ BSD-2-Clause
+  */
+-#include "libfdt_env.h"
++#include "../../include/libfdt_env.h"
+ 
+ #ifndef USE_HOSTCC
+ #include <fdt.h>
+diff --git a/lib/libfdt/fdt_ro.c b/lib/libfdt/fdt_ro.c
+index 44fc0aa900..55a31bdec8 100644
+--- a/lib/libfdt/fdt_ro.c
++++ b/lib/libfdt/fdt_ro.c
+@@ -3,7 +3,7 @@
+  * Copyright (C) 2006 David Gibson, IBM Corporation.
+  * SPDX-License-Identifier:	GPL-2.0+ BSD-2-Clause
+  */
+-#include "libfdt_env.h"
++#include "../../include/libfdt_env.h"
+ 
+ #ifndef USE_HOSTCC
+ #include <fdt.h>
+diff --git a/lib/libfdt/fdt_rw.c b/lib/libfdt/fdt_rw.c
+index bec8b8ad89..3d0aca17e8 100644
+--- a/lib/libfdt/fdt_rw.c
++++ b/lib/libfdt/fdt_rw.c
+@@ -3,7 +3,7 @@
+  * Copyright (C) 2006 David Gibson, IBM Corporation.
+  * SPDX-License-Identifier:	GPL-2.0+ BSD-2-Clause
+  */
+-#include "libfdt_env.h"
++#include "../../include/libfdt_env.h"
+ 
+ #ifndef USE_HOSTCC
+ #include <fdt.h>
+diff --git a/lib/libfdt/fdt_strerror.c b/lib/libfdt/fdt_strerror.c
+index 2f3cc243db..8c7435b464 100644
+--- a/lib/libfdt/fdt_strerror.c
++++ b/lib/libfdt/fdt_strerror.c
+@@ -3,7 +3,7 @@
+  * Copyright (C) 2006 David Gibson, IBM Corporation.
+  * SPDX-License-Identifier:	GPL-2.0+ BSD-2-Clause
+  */
+-#include "libfdt_env.h"
++#include "../../include/libfdt_env.h"
+ 
+ #ifndef USE_HOSTCC
+ #include <fdt.h>
+diff --git a/lib/libfdt/fdt_wip.c b/lib/libfdt/fdt_wip.c
+index 3f2dfa573b..030a903e0d 100644
+--- a/lib/libfdt/fdt_wip.c
++++ b/lib/libfdt/fdt_wip.c
+@@ -3,7 +3,7 @@
+  * Copyright (C) 2006 David Gibson, IBM Corporation.
+  * SPDX-License-Identifier:	GPL-2.0+ BSD-2-Clause
+  */
+-#include "libfdt_env.h"
++#include "../../include/libfdt_env.h"
+ 
+ #ifndef USE_HOSTCC
+ #include <fdt.h>
+-- 
+2.14.4
+

@@ -1,0 +1,44 @@
+From 94ef32d67033854339f0a923e15101e7c2746d4d Mon Sep 17 00:00:00 2001
+From: Parthiban Nallathambi <parthiban@linumiz.com>
+Date: Sun, 23 Sep 2018 15:17:21 +0200
+Subject: [PATCH 3/4] mmc: refer relative path for headers
+
+- use relative path for local header files
+
+Signed-off-by: Parthiban Nallathambi <parthiban@linumiz.com>
+
+%% original patch: 0003-mmc-refer-relative-path-for-headers.patch
+---
+ drivers/mmc/owl_mmc.c | 2 +-
+ drivers/mmc/owl_mmc.h | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/mmc/owl_mmc.c b/drivers/mmc/owl_mmc.c
+index 2a80cbcb2b..d4b6f6af9e 100755
+--- a/drivers/mmc/owl_mmc.c
++++ b/drivers/mmc/owl_mmc.c
+@@ -17,7 +17,7 @@
+ #include <asm/io.h>
+ #include <asm/byteorder.h>
+ #include <asm/unaligned.h>
+-#include <owl_mmc.h>
++#include "owl_mmc.h"
+ #include <asm/arch/periph.h>
+ #include <asm/arch/pinmux.h>
+ #include <asm/arch/clk.h>
+diff --git a/drivers/mmc/owl_mmc.h b/drivers/mmc/owl_mmc.h
+index aa6bdf241c..e61eccf0a9 100755
+--- a/drivers/mmc/owl_mmc.h
++++ b/drivers/mmc/owl_mmc.h
+@@ -4,7 +4,7 @@
+ #if defined(CONFIG_S900)
+ #include <owl_mmc_s900.h>
+ #elif defined(CONFIG_S700)
+-#include <owl_mmc_s700.h>
++#include "owl_mmc_s700.h"
+ #elif defined(CONFIG_ATS3605)
+ #include <owl_mmc_ats3605.h>
+ #else
+-- 
+2.14.4
+
