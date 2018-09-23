@@ -12,8 +12,6 @@ YOCTO_LAYERS = " \
   ##OEROOT##/meta \
   ##OEROOT##/meta-yocto-bsp \
   ##OEROOT##/meta-poky \
-  ##OEROOT##/meta-yocto-bsp \
-  ##OEROOT##/meta-gplv2 \
   "
 
 BBLAYERS ?= "${ACTIONS_LAYERS} ${YOCTO_LAYERS}"
