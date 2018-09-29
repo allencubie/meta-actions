@@ -1,4 +1,5 @@
 part bootloader --no-table --size 512 --align 4097 --source rawcopy --sourceparams="file=bootloader.bin"
 part u-boot --no-table --align 3072 --source rawcopy --sourceparams="file=u-boot-dtb.img"
-
-bootloader --ptable msdos
+# bootloader --ptable msdos
+part /boot --source bootimg-partition --ondisk mmcblk0 --fstype=vfat --label boot --active --align 4096 --size 20
+part / --source rootfs --ondisk mmcblk0 --fstype=ext4 --label root --align 4096
