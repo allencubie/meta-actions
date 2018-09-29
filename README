@@ -1,2 +1,16 @@
 # meta-actions
 Yocto meta layer for Actions Semiconductors Owl Family SoC's and boards
+
+TODO Board list:
+| Board | SoC |
+|:-------------:|:-------------:|
+| [Cubieboard6](http://www.cubietech.com/product-detail/cubieboard6/) | S500 |
+| [Aceberry](https://www.cnx-software.com/2015/12/15/aceberry-s500-is-a-30-actions-semi-s500-development-board-comprised-of-a-module-and-a-baseboard/) | S500 |
+| [ActDuino](https://www.cnx-software.com/2015/04/02/actduino-s500-development-board-features-actions-semi-s500-quad-core-processor/) | S500 |
+| [LeMaker Guitar](https://www.cnx-software.com/2015/06/25/lemaker-guitar-is-a-25-single-board-computer-powered-by-actions-semi-s500-processor/) | S500 |
+| [Lemon Pi](https://www.cnx-software.com/2015/05/20/lemon-pi-board-is-a-35-raspberry-pi-2-alternative-powered-by-actions-semi-s500-soc-crowdfunding/) | S500 |
+| [Allo SPARKY](https://www.cnx-software.com/2015/09/14/allo-sparky-board-supports-raspberry-pi-hats-for-multimedia-iot-and-voip-applications/) | S500 |
+| [Roseapple Pi](https://www.cnx-software.com/2015/10/06/lemon-pi-board-becomes-roseapple-pi-gets-an-upgrade-to-2gb-ram/) | S500 |
+| [Cubieboard7](http://www.cubietech.com/product-detail/cubieboard7/) | S700 |
+| [Banana Pi BPI-S64 Core](http://wiki.banana-pi.org/Banana_Pi_BPI-S64_Core) | S700 |
+| [Bubblegum-96](http://www.ucrobotics.com.cn/bubblegum96/) | S900 |
