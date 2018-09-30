@@ -1,5 +1,16 @@
-part bootloader --no-table --size 512 --align 4097 --source rawcopy --sourceparams="file=bootloader.bin"
+#####################
+# short-description: Create eMMC & SD image
+# long-description: Create an image that can be written into an eMMC & SD using dd
+#
+# The disk layout used is:
+# ---------------------------------------------------
+# |	| bootloader.bin | u-boot | /boot | /rootfs |
+# ---------------------------------------------------
+#	^		 ^
+#	|		 |
+# 0	2048kiB		 3072kiB
+
+part bootloader --no-table --align 2048 --source rawcopy --sourceparams="file=bootloader.bin"
 part u-boot --no-table --align 3072 --source rawcopy --sourceparams="file=u-boot-dtb.img"
-# bootloader --ptable msdos
-part /boot --source bootimg-partition --ondisk mmcblk0 --fstype=vfat --label boot --active --align 4096 --size 20
-part / --source rootfs --ondisk mmcblk0 --fstype=ext4 --label root --align 4096
+part /boot --source bootimg-partition --ondisk mmcblk1 --fstype=vfat --label boot --active --size 20
+part / --source rootfs --ondisk mmcblk1 --fstype=ext4 --label root
