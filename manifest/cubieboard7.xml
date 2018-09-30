@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<manifest>
+  <remote fetch="https://git.yoctoproject.org/git/poky" name="poky"/>
+  <remote fetch="https://github.com/Linumiz/meta-actions.git" name="meta-actions"/>
+
+  <project remote="poky" revision="master" name="poky" path="actions"/>
+  <project remote="meta-actions" revision="master" name="meta-actions" path="actions/meta-actions"/>
+</manifest>
