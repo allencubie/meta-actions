@@ -1,6 +1,5 @@
 #####################
-# short-description: Create eMMC & SD image
-# long-description: Create an image that can be written into an eMMC & SD using dd
+# description: Create an image that can be written into an eMMC & SD using dd
 #
 # The disk layout used is:
 # ---------------------------------------------------
@@ -9,6 +8,16 @@
 #	^		 ^
 #	|		 |
 # 0	2048kiB		 3072kiB
+#
+# Offset which cubieboard really looks for,
+# bootloader.bin - 4097 Bytes
+# u-boot	 - 3072 kiB
+#
+# bootloader.bin is delivered as binary from vendor which is directly copied into
+# recipes-bsp/u-boot.
+#
+# As wic align doesn't support alignment in bytes, bootloader.bin is prepended with
+# 512 bytes of zeros and copied into 2048kiB (4096 bytes offset).
 
 part bootloader --no-table --align 2048 --source rawcopy --sourceparams="file=bootloader.bin"
 part u-boot --no-table --align 3072 --source rawcopy --sourceparams="file=u-boot-dtb.img"
