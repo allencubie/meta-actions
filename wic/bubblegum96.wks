@@ -1,0 +1,25 @@
+#####################
+# description: Create an image that can be written into an eMMC using dd
+#
+# The disk layout used is:
+# ---------------------------------------------------
+# |	| bootloader.bin | u-boot | /boot | /rootfs |
+# ---------------------------------------------------
+#	^		 ^
+#	|		 |
+# 0	2048kiB		 3072kiB
+#
+# Offset which bubblegum96 really looks for,
+# bootloader.bin - 4097 Bytes
+# u-boot	 - 3072 kiB
+#
+# bootloader.bin is delivered as binary from vendor which is directly copied into
+# recipes-bsp/u-boot.
+#
+# As wic align doesn't support alignment in bytes, bootloader.bin is prepended with
+# 512 bytes of zeros and copied into 2048kiB (4096 bytes offset).
+
+part bootloader --no-table --align 2048 --source rawcopy --sourceparams="file=bootloader.bin"
+part u-boot --no-table --align 3072 --source rawcopy --sourceparams="file=u-boot-dtb.img"
+part /boot --source bootimg-partition --ondisk mmcblk1 --fstype=vfat --label boot --active --size 20
+part / --source rootfs --ondisk mmcblk1 --fstype=ext4 --label root
