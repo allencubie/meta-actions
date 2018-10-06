@@ -32,9 +32,9 @@ $ repo sync
 
 ## Configuring the project
 
-meta-actions offers pre-configured machine templates, tested and ready to use:
-**Cautions**: Default machine from template is cubieboard7.
-The following machines are supported,
+meta-actions offers pre-configured machine templates, tested and ready to use.
+
+**Cautions**: Default machine from template is cubieboard7. The following machines are supported,
 - cubieboard7
 - bubblegum96
 
