@@ -21,7 +21,7 @@ To easily manage different git repositories layers, meta-actions project is usin
 First initialize repo specifying the project manifest and the corresponding branch:
 
 ```shell
-$ repo init -u https://github.com/Linumiz/meta-actions.git/ -m conf/samples/cubieboard7.xml -b master
+$ repo init -u https://github.com/Linumiz/meta-actions.git/ -m conf/samples/manifest-actions.xml -b master
 ```
 
 then checkout the project source tree:
@@ -33,6 +33,10 @@ $ repo sync
 ## Configuring the project
 
 meta-actions offers pre-configured machine templates, tested and ready to use:
+**Cautions**: Default machine from template is cubieboard7.
+The following machines are supported,
+- cubieboard7
+- bubblegum96
 
 ```shell
 $ cd actions/
