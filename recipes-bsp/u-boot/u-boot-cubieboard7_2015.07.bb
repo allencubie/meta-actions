@@ -4,11 +4,15 @@ require u-boot.inc
 DEPENDS += "bc-native dtc-native coreutils-native"
 
 PATCHTOOL = "git"
-SRC_URI += "file://0001-Change-comments-formet-to-ISO-C90.patch \
-		file://0002-gcc8-compiler-header-for-u-boot.patch \
-		file://0003-mmc-refer-relative-path-for-headers.patch \
-		file://0004-libfdl-fdt-header-reference-conflict-multipe-definit.patch \
-		file://bootloader.bin \
+BRANCH = "cubieboard7"
+SRCREV = "${AUTOREV}"
+UBOOT_MAKE_TARGET = "${UBOOT_BINARY}"
+SRC_URI = "git://github.com/Linumiz/u-boot.git;branch=${BRANCH} \
+	    file://0001-Change-comments-formet-to-ISO-C90.patch \
+	    file://0002-gcc8-compiler-header-for-u-boot.patch \
+            file://0003-mmc-refer-relative-path-for-headers.patch \
+	    file://0004-libfdl-fdt-header-reference-conflict-multipe-definit.patch \
+	    file://bootloader.bin \
 	"
 
 do_compile_append() {
