@@ -1,4 +1,4 @@
-require linux-actions.inc
+require linux-cubieboard7.inc
 
 DEFAULT_PREFERENCE = "-1"
 
