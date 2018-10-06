@@ -1,0 +1,131 @@
+From patchwork Mon Apr 10 15:32:00 2017
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Patchwork-Submitter: Jiri Slaby <jslaby@suse.cz>
+X-Patchwork-Id: 778316
+Return-Path: <linux-kernel-owner@vger.kernel.org>
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+        id S1754360AbdDJPeY (ORCPT <rfc822;w@1wt.eu>);
+        Mon, 10 Apr 2017 11:34:24 -0400
+Received: from mx2.suse.de ([195.135.220.15]:37766 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1754269AbdDJPeO (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 10 Apr 2017 11:34:14 -0400
+X-Amavis-Alert: BAD HEADER SECTION, Duplicate header field: "References"
+From: Jiri Slaby <jslaby@suse.cz>
+To: stable@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Jiri Slaby <jslaby@suse.cz>
+Subject: [PATCH 3.12 039/142] give up on gcc ilog2() constant optimizations
+Date: Mon, 10 Apr 2017 17:32:00 +0200
+Message-Id: 
+ <44fd5d00c835f410ee76880006aad568fdc07246.1491838390.git.jslaby@suse.cz>
+X-Mailer: git-send-email 2.12.2
+In-Reply-To: 
+ <d4b83d12d815bafc24064e91de353edb2478d8f7.1491838390.git.jslaby@suse.cz>
+References: 
+ <d4b83d12d815bafc24064e91de353edb2478d8f7.1491838390.git.jslaby@suse.cz>
+In-Reply-To: <cover.1491838390.git.jslaby@suse.cz>
+References: <cover.1491838390.git.jslaby@suse.cz>
+Sender: linux-kernel-owner@vger.kernel.org
+List-ID: <linux-kernel.vger.kernel.org>
+X-Mailing-List: linux-kernel@vger.kernel.org
+Content-Length: 3130
+Lines: 93
+
+From: Linus Torvalds <torvalds@linux-foundation.org>
+
+3.12-stable review patch.  If anyone has any objections, please let me know.
+
+===============
+
+commit 474c90156c8dcc2fa815e6716cc9394d7930cb9c upstream.
+
+gcc-7 has an "optimization" pass that completely screws up, and
+generates the code expansion for the (impossible) case of calling
+ilog2() with a zero constant, even when the code gcc compiles does not
+actually have a zero constant.
+
+And we try to generate a compile-time error for anybody doing ilog2() on
+a constant where that doesn't make sense (be it zero or negative).  So
+now gcc7 will fail the build due to our sanity checking, because it
+created that constant-zero case that didn't actually exist in the source
+code.
+
+There's a whole long discussion on the kernel mailing about how to work
+around this gcc bug.  The gcc people themselevs have discussed their
+"feature" in
+
+   https://gcc.gnu.org/bugzilla/show_bug.cgi?id=72785
+
+but it's all water under the bridge, because while it looked at one
+point like it would be solved by the time gcc7 was released, that was
+not to be.
+
+So now we have to deal with this compiler braindamage.
+
+And the only simple approach seems to be to just delete the code that
+tries to warn about bad uses of ilog2().
+
+So now "ilog2()" will just return 0 not just for the value 1, but for
+any non-positive value too.
+
+It's not like I can recall anybody having ever actually tried to use
+this function on any invalid value, but maybe the sanity check just
+meant that such code never made it out in public.
+
+[js] no tools/include/linux/log2.h copy of that yet
+
+Reported-by: Laura Abbott <labbott@redhat.com>
+Cc: John Stultz <john.stultz@linaro.org>,
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ard Biesheuvel <ard.biesheuvel@linaro.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+---
+ include/linux/log2.h | 13 ++-----------
+ 1 file changed, 2 insertions(+), 11 deletions(-)
+
+diff --git a/include/linux/log2.h b/include/linux/log2.h
+index fd7ff3d91e6a..f38fae23bdac 100644
+--- a/include/linux/log2.h
++++ b/include/linux/log2.h
+@@ -16,12 +16,6 @@
+ #include <linux/bitops.h>
+ 
+ /*
+- * deal with unrepresentable constant logarithms
+- */
+-extern __attribute__((const, noreturn))
+-int ____ilog2_NaN(void);
+-
+-/*
+  * non-constant log of base 2 calculators
+  * - the arch may override these in asm/bitops.h if they can be implemented
+  *   more efficiently than using fls() and fls64()
+@@ -85,7 +79,7 @@ unsigned long __rounddown_pow_of_two(unsigned long n)
+ #define ilog2(n)				\
+ (						\
+ 	__builtin_constant_p(n) ? (		\
+-		(n) < 1 ? ____ilog2_NaN() :	\
++		(n) < 2 ? 0 :			\
+ 		(n) & (1ULL << 63) ? 63 :	\
+ 		(n) & (1ULL << 62) ? 62 :	\
+ 		(n) & (1ULL << 61) ? 61 :	\
+@@ -148,10 +142,7 @@ unsigned long __rounddown_pow_of_two(unsigned long n)
+ 		(n) & (1ULL <<  4) ?  4 :	\
+ 		(n) & (1ULL <<  3) ?  3 :	\
+ 		(n) & (1ULL <<  2) ?  2 :	\
+-		(n) & (1ULL <<  1) ?  1 :	\
+-		(n) & (1ULL <<  0) ?  0 :	\
+-		____ilog2_NaN()			\
+-				   ) :		\
++		1 ) :				\
+ 	(sizeof(n) <= 4) ?			\
+ 	__ilog2_u32(n) :			\
+ 	__ilog2_u64(n)				\
